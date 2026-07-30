@@ -1,0 +1,48 @@
+# Environment variables / secrets -- NEVER commit real API keys
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Pytest / test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Vector store data (if present, e.g. in the RAG chatbot project)
+chroma_data/
+*.sqlite3
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS-specific
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log

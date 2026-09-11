@@ -1,10 +1,11 @@
 """
 Pluggable LLM client. One `call_llm(prompt)` function; the actual provider
 (Groq / OpenAI / Gemini) is chosen once at startup from LLM_PROVIDER in the
-environment. This keeps summarizer.py provider-agnostic, and it's the same
-seam L3-12 (Model Evaluation Dashboard) will hook into to benchmark
-providers against each other.
+environment.
 """
+import time
+from openai import RateLimitError
+
 from app.config import get_settings
 
 settings = get_settings()
@@ -47,18 +48,29 @@ def call_llm(prompt: str, max_tokens: int = 1024, temperature: float = 0.3) -> s
         raise LLMCallError(f"Call to provider '{provider}' failed: {exc}") from exc
 
 
-def _call_groq(prompt: str, max_tokens: int, temperature: float) -> str:
+def _call_groq(prompt: str, max_tokens: int, temperature: float, max_retries: int = 5) -> str:
     from groq import Groq
 
     key = _require_key(settings.groq_api_key, "groq")
     client = Groq(api_key=key)
-    response = client.chat.completions.create(
-        model=settings.groq_model,
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=max_tokens,
-        temperature=temperature,
-    )
-    return response.choices[0].message.content.strip()
+
+    for attempt in range(max_retries):
+        try:
+            response = client.chat.completions.create(
+                model=settings.groq_model,
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=max_tokens,
+                temperature=temperature,
+            )
+            return response.choices[0].message.content.strip()
+        except RateLimitError:
+            if attempt == max_retries - 1:
+                raise
+            # Groq's free-tier TPM limit resets fast (usually well under 1s
+            # to a few seconds) — a short fixed wait with mild backoff is
+            # enough, no need for long exponential delays.
+            wait = 0.5 * (attempt + 1)  # 0.5s, 1s, 1.5s, 2s, 2.5s
+            time.sleep(wait)
 
 
 def _call_openai(prompt: str, max_tokens: int, temperature: float) -> str:

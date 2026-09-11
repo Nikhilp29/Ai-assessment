@@ -18,8 +18,8 @@ from app.config import GROQ_MODEL, OPENAI_MODEL, GEMINI_MODEL
 PRICING = {
     "groq": {
         "model": GROQ_MODEL,
-        "input_per_1k": 0.00005,
-        "output_per_1k": 0.00008,
+        "input_per_1k": 0.00015,
+        "output_per_1k": 0.00060,
     },
     "openai": {
         "model": OPENAI_MODEL,
@@ -28,8 +28,8 @@ PRICING = {
     },
     "gemini": {
         "model": GEMINI_MODEL,
-        "input_per_1k": 0.000075,
-        "output_per_1k": 0.00030,
+        "input_per_1k": 0.0015,
+        "output_per_1k": 0.0075,
     },
 }
 

@@ -11,7 +11,7 @@ class Settings:
     groq_api_key: str | None = os.getenv("GROQ_API_KEY")
     openai_api_key: str | None = os.getenv("OPENAI_API_KEY")
     gemini_api_key: str | None = os.getenv("GEMINI_API_KEY")
-    groq_model: str = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
+    groq_model: str = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
     openai_model: str = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
     gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
 

@@ -23,13 +23,13 @@ class Settings:
     gemini_api_key: str | None = os.getenv("GEMINI_API_KEY")
 
     # Model names per provider (override in .env if you want a different model)
-    groq_model: str = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
+    groq_model: str = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
     openai_model: str = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
     gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
 
     # Chunking parameters
-    chunk_size: int = int(os.getenv("CHUNK_SIZE", "4000"))       # characters
-    chunk_overlap: int = int(os.getenv("CHUNK_OVERLAP", "400"))  # characters
+    chunk_size: int = int(os.getenv("CHUNK_SIZE", "500"))       # characters
+    chunk_overlap: int = int(os.getenv("CHUNK_OVERLAP", "100"))  # characters
 
     # Upload limits
     max_file_size_mb: int = int(os.getenv("MAX_FILE_SIZE_MB", "20"))
